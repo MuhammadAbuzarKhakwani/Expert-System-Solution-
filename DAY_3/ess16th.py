@@ -10,6 +10,12 @@ new_l = [i.upper() for i in names]
 len_l = [len(i) for i in names]
 five_l = [i*2 for i in range(5,16)] #Create a list containing numbers from 5 to 15, but store their double values
 div_2 = [(i*2)/2 for i in range(5)]
+words = ["apple","cat","banana","dog","python"]
+
+new_w = [i for i in words if len(i)>4]
+
+new_ev = [i**2 for i in range(11) if i%2==0]
+
 print(numbers)
 print("")
 print(num)
@@ -21,4 +27,8 @@ print("")
 print(five_l)
 print("")
 print(div_2)
+print("")
+print(new_w)
+print("")
+print(new_ev)
 
