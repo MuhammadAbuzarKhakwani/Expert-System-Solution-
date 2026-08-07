@@ -1,16 +1,19 @@
 
 matrix = [
-    [1,2,3],
-    [4,5,6],
-    [7,8,9]
+    [[1,2,3],[4,5,6]],
+    [[1,2,3],[4,5,6]],
+    [[1,2,3],[4,5,6]]
 ]
 
-list_f = [j for i in matrix for j in i]
-'''
+list_f = [[[k*4 for k in i] for i in j] for j in matrix]
+
+list_s = []
+
 for i in matrix:
     for j in i:
-        list_f.append(j)'''
+        list_s.append(j)
 
 
 
 print(list_f)
+# print(list_s)
