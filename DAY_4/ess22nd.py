@@ -17,6 +17,23 @@ print(dic_l)
 
 print(list_a[-2])
 
+#invert dictionary
+
+student = {
+    'name' : "abuzar"
+}
+
+std = {}
+
+for key,val in student.items():
+    std[val] = key
+
+print(std)
+
+
+
+
+
 
 
 
