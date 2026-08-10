@@ -8,4 +8,3 @@ for key,val in student.items():
     for ke,va in val.items():
         print("inner key: ",ke)
         print("value: ",va)
-

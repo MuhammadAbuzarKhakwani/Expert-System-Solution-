@@ -19,3 +19,5 @@ nameAge("Dawood", 27)
 print("Case-2:")
 nameAge(27, "Haris")
 
+
+
