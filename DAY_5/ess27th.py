@@ -15,8 +15,6 @@ def write_file(D):
         file.close()
 
 
-
-
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -107,6 +105,7 @@ def main():
             print("")        
 if __name__ =="__main__":
     main()
+
 
 
 
