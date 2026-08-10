@@ -32,11 +32,14 @@ def del_p(D):
 def search_p(D):
     name = input("Enter product to Search: ")
     if name in D:
-        print("Found it")
+        print(f"Name: {name}, Quantity: {D[name]}")
+        # print("Found it")
+    else:
+        print("This product does not exist")
 
 def Display_p_i(D):
-    for key in D:
-        print("Products: ",key) 
+    for key,val in D.items():
+        print(f"Product: {key} - Value: {val}") 
 
 
 def sl_pause():
@@ -55,26 +58,33 @@ def main():
         print_menu()
         try:
             choice = int(input("Enter your choice: "))
+        
+            match choice:
+                case 1:
+                    clear_screen()
+                    Add_p(D)
+                case 2:
+                    clear_screen()
+                    UPD_p(D)
+                case 3:
+                    clear_screen()
+                    del_p(D)
+                case 4:
+                    clear_screen()
+                    search_p(D)
+                case 5:
+                    clear_screen()
+                    Display_p_i(D)
+                case 6:
+                    clear_screen()
+                    c = False
+                case _:
+                    clear_screen()
+                    print("Invalid Input")
         except ValueError:
             print("Banda ban oye!!.Please enter a value from 1-6")
             print("")
-
-        match choice:
-            case 1:
-                Add_p(D)
-            case 2:
-                UPD_p(D)
-            case 3:
-                del_p(D)
-            case 4:
-                search_p(D)
-            case 5:
-                Display_p_i(D)
-            case 6:
-                c = False
-            case _:
-                print("Invalid Input")
-        
+    
             
 main()
 

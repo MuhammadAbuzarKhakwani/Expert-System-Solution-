@@ -16,7 +16,7 @@ Output Format
 
 Print Weird if the number is weird. Otherwise, print Not Weird'''
 
-num = int(input("Enter a Number: "))
+num = int(input())
 
 if num > 0:
     if num%2 == 0:

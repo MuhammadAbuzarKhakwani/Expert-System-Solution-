@@ -19,8 +19,11 @@ print(list_a[-2])
 
 #invert dictionary
 
+
+
 student = {
-    'name' : "abuzar"
+    'name' : "abuzar",
+    'age' : 21
 }
 
 std = {}
@@ -31,11 +34,15 @@ for key,val in student.items():
 print(std)
 
 
+student["name"] = "khakwani"
 
+for key in student:
+    print(key)
 
+for i in student.values():
+    print(i)
+    
+for k,w in student.items():
+    print(k," ",w)
 
-
-
-
-
-
+student["surname"] = "khakwani"

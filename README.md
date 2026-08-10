@@ -53,6 +53,7 @@ Python · Visual Studio Code · Git & GitHub · C++ (prior experience) · SQL (p
 **Advanced** — Automation · Web Development · Data Analysis · Machine Learning · AI Development
 
 
+
 ## Purpose
 A daily learning record, a collection of practice programs, a portfolio of growth, and a reference for future projects.
 
