@@ -93,5 +93,4 @@ def main():
         else:
             player = "X"
 
-if __name__ == "__main__":
-    main()
+main()

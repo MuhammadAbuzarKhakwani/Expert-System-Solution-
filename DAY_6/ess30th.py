@@ -56,7 +56,7 @@ def generate_result(name, passing_marks=40, bonus=5):
             else:
                 result = "FAIL"
 
-            # Grade
+            
             if average >= 90:
                 grade = "A+"
             elif average >= 80:
