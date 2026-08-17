@@ -18,4 +18,3 @@ cat = Cat()
 
 dog.sound()
 cat.sound()
-super().cat
