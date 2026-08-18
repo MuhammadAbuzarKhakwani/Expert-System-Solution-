@@ -1,45 +1,45 @@
-# class animal:
-#     def __init__(self,name,age):
-#         self.name = name 
-#         self.age = age 
+class animal:
+    def __init__(self,name,age):
+        self.name = name 
+        self.age = age 
     
-# class dog(animal):
-#     def __init__(self,name,age,sound):
-#         super().__init__(name,age)
-#         self.sound = sound
+class dog(animal):
+    def __init__(self,name,age,sound):
+        super().__init__(name,age)
+        self.sound = sound
     
 
-#     def display(self):
-#         print(self.name)
-#         print(self.age)
-#         print(self.sound)
+    def display(self):
+        print(self.name)
+        print(self.age)
+        print(self.sound)
 
 
-# kutta = dog("poosh",2,"Bhau bhau")
+kutta = dog("poosh",2,"Bhau bhau")
 
-# kutta.display()
+kutta.display()
 
 
-# class Animal:
-#     def __init__(self,name,age):
-#         self.name = name 
-#         self.age = age 
+class Animal:
+    def __init__(self,name,age):
+        self.name = name 
+        self.age = age 
     
-# class Cat(Animal):
-#     def __init__(self,animal,race):
-#         super().__init__(animal.name,animal.age)
-#         self.race = race
+class Cat(Animal):
+    def __init__(self,animal,race):
+        super().__init__(animal.name,animal.age)
+        self.race = race
 
-#     def display(self):
-#         print(self.name, self.race, self.age)
-
-
-# A1 = Animal("lusi",2)
+    def display(self):
+        print(self.name, self.race, self.age)
 
 
-# c1 = Cat(A1,"persian")
+A1 = Animal("lusi",2)
 
-# c1.display()
+
+c1 = Cat(A1,"persian")
+
+c1.display()
 
 class person:
     def __init__(self,name,age,cnic):
