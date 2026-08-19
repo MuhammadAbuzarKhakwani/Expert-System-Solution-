@@ -26,8 +26,7 @@ class stack:
         return self.items
 
     def get_min(self):
-        self.items.sort(reverse = True)
-        return self.items[-1]
+        return min(self.items)
     
 First = stack()
 
