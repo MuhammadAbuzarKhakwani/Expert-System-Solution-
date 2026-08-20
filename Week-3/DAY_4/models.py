@@ -96,3 +96,8 @@ class StudentPortfolio(models.Model):
     bio = models.TextField(max_length = 1000)
 
 
+from django.contrib import admin
+from . import models
+
+admin.site.register(models.Student)
+
