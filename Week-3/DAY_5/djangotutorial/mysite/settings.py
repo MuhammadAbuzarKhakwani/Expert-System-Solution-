@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'polls.apps.PollsConfig',  # Add the polls app configuration
 ]
 
 MIDDLEWARE = [
@@ -104,12 +105,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# settings.py
 
-USE_I18N = True
+# Set the time zone to Pakistan
+TIME_ZONE = 'Asia/Karachi'
 
+# Keep timezone awareness active
 USE_TZ = True
 
+
+USE_I18N = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
