@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Todo App</title>
+</head>
+
+<body>
+
+    <h1>My Todo App</h1>
+
+    <h2>Add Todo</h2>
+
+    <form method="POST" action="{% url 'add_todo' %}">
+        {% csrf_token %}
+
+        <input
+            type="text"
+            name="text"
+            placeholder="Enter a todo"
+            maxlength="200"
+            required
+        >
+
+        <button type="submit">Add Todo</button>
+    </form>
+
+    <hr>
+
+    <h2>Statistics</h2>
+
+    <p>Pending: {{ pending_count }}</p>
+    <p>Completed: {{ completed_count }}</p>
+
+    <hr>
+
+    <h2>Todos</h2>
+
+    {% if todos %}
+
+        <ul>
+
+            {% for todo in todos %}
+
+                <li>
+
+                    {% if todo.completed %}
+
+                        <del>{{ todo.text }}</del>
+
+                        <p>
+                            Completed at:
+                            {{ todo.completed_at }}
+                        </p>
+
+                        <a href="{% url 'incomplete_todo' todo.id %}">
+                            Mark Incomplete
+                        </a>
+
+                    {% else %}
+
+                        {{ todo.text }}
+
+                        <a href="{% url 'complete_todo' todo.id %}">
+                            Complete
+                        </a>
+
+                    {% endif %}
+
+                    |
+
+                    <a href="{% url 'edit_todo' todo.id %}">
+                        Edit
+                    </a>
+
+                    |
+
+                    <a href="{% url 'delete_todo' todo.id %}">
+                        Delete
+                    </a>
+
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    {% else %}
+
+        <p>No todos yet.</p>
+
+    {% endif %}
+
+</body>
+</html>

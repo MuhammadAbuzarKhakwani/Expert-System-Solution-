@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Todo</title>
+</head>
+
+<body>
+
+    <h1>Edit Todo</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input
+            type="text"
+            name="text"
+            value="{{ todo.text }}"
+            maxlength="200"
+            required
+        >
+
+        <button type="submit">Save</button>
+    </form>
+
+    <p>
+        <a href="{% url 'todo_list' %}">
+            Back to Todos
+        </a>
+    </p>
+
+</body>
+</html>
