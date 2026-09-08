@@ -1,156 +1,40 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
-<head>
-    <title>{{ book.title }}</title>
-</head>
+{% block title %}{{ book.title }}{% endblock %}
 
-<body>
+{% block content %}
 
     <h1>{{ book.title }}</h1>
 
-    <p>
-        <strong>Author:</strong>
-        {{ book.author }}
-    </p>
-
-    <p>
-        <strong>Category:</strong>
-        {{ book.category }}
-    </p>
-
-    <p>
-        <strong>ISBN:</strong>
-        {{ book.isbn }}
-    </p>
-
-    <p>
-        <strong>Published:</strong>
-        {{ book.published_date }}
-    </p>
-
-    <p>
-        <strong>Available:</strong>
-
-        {% if book.available %}
-            Yes
-        {% else %}
-            Borrowed
-        {% endif %}
-
-    </p>
-
+    <p><strong>Author:</strong> {{ book.author }}</p>
+    <p><strong>Category:</strong> {{ book.category }}</p>
+    <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+    <p><strong>Published:</strong> {{ book.published_date }}</p>
+    <p><strong>Available:</strong> {% if book.available %}Yes{% else %}Borrowed{% endif %}</p>
 
     <hr>
 
-
-    <!-- Edit -->
-
-    <a href="{% url 'book-edit' book.pk %}">
-        <button type="button">
-            Edit Book
-        </button>
-    </a>
-
-
-    <!-- Back -->
-
-    <a href="{% url 'book-list' %}">
-        <button type="button">
-            Back to Books
-        </button>
-    </a>
-
-
-    <br>
-    <br>
-
-
-    <!-- Delete -->
-
-    <form
-        action="{% url 'delete_book' book.pk %}"
-        method="post"
-        style="display: inline;"
-    >
-
-        {% csrf_token %}
-
-        <button type="submit">
-            Delete Book
-        </button>
-
-    </form>
-
-
-    {% if user.is_authenticated %}
-
-        {% if book.available %}
-
-            <!-- Borrow -->
-
-            <form
-                action="{% url 'borrow_book' book.pk %}"
-                method="post"
-                style="display: inline;"
-            >
-
-                {% csrf_token %}
-
-                <button type="submit">
-                    Borrow Book
-                </button>
-
-            </form>
-
-        {% else %}
-
-            <!-- Return -->
-
-            <form
-                action="{% url 'return_book' book.pk %}"
-                method="post"
-                style="display: inline;"
-            >
-
-                {% csrf_token %}
-
-                <button type="submit">
-                    Return Book
-                </button>
-
-            </form>
-
+    <div>
+        {% if user.is_staff %}
+            <a href="{% url 'book-edit' book.pk %}"><button type="button">Edit</button></a>
+            <form action="{% url 'delete_book' book.pk %}" method="post" style="display:inline">{% csrf_token %}<button type="submit">Delete</button></form>
         {% endif %}
 
-    {% else %}
+        {% if user.is_authenticated %}
+            {% if book.available %}
+                <form action="{% url 'borrow_book' book.pk %}" method="post" style="display:inline">{% csrf_token %}<button type="submit">Borrow Book</button></form>
+            {% else %}
+                {% if user_has_borrowed %}
+                    <form action="{% url 'return_book' book.pk %}" method="post" style="display:inline">{% csrf_token %}<button type="submit">Return Book</button></form>
+                {% else %}
+                    <p><em>This book is currently borrowed by someone else.</em></p>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> to borrow or manage books.</p>
+        {% endif %}
+    </div>
 
-        <p>
-            Please log in to borrow or return books.
-        </p>
+    <p><a href="{% url 'book-list' %}">Back to Books</a></p>
 
-    {% endif %}
-
-
-    <!-- Messages -->
-
-    {% if messages %}
-
-        <ul>
-
-            {% for message in messages %}
-
-                <li>
-                    {{ message }}
-                </li>
-
-            {% endfor %}
-
-        </ul>
-
-    {% endif %}
-
-
-</body>
-
-</html>
+{% endblock %}

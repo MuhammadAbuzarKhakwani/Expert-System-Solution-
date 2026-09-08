@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -43,16 +43,28 @@ def book_detail(request, pk):
 
     book = get_object_or_404(Book, pk=pk)
 
+    # Determine if the current user has an active borrowing record for this book
+    user_has_borrowed = False
+
+    if request.user.is_authenticated:
+        user_has_borrowed = BorrowRecord.objects.filter(
+            user=request.user,
+            book=book,
+            returned_at__isnull=True,
+        ).exists()
+
     return render(
         request,
         "books/book-detail.html",
         {
-            "book": book
+            "book": book,
+            "user_has_borrowed": user_has_borrowed,
         }
     )
 
 
 @login_required
+@user_passes_test(lambda u: u.is_staff)
 def book_create(request):
 
     if request.method == "POST":
@@ -79,6 +91,7 @@ def book_create(request):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_staff)
 def book_edit(request, pk):
 
     book = get_object_or_404(Book, pk=pk)
@@ -108,6 +121,7 @@ def book_edit(request, pk):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_staff)
 def delete_book(request, pk):
 
     book = get_object_or_404(Book, pk=pk)
