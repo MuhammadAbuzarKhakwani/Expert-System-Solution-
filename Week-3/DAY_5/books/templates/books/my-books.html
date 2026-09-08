@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Books</title>
+</head>
+
+<body>
+
+    <h1>My Borrowed Books</h1>
+
+
+    {% if borrowed_books %}
+
+        <ul>
+
+            {% for record in borrowed_books %}
+
+                <li>
+
+                    <a href="{% url 'book-detail' record.book.pk %}">
+                        {{ record.book.title }}
+                    </a>
+
+                    — Borrowed on
+                    {{ record.borrowed_at }}
+
+
+                    {% if record.returned_at %}
+
+                        — Returned on
+                        {{ record.returned_at }}
+
+                    {% else %}
+
+                        — Currently Borrowed
+
+                    {% endif %}
+
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    {% else %}
+
+        <p>
+            You haven't borrowed any books.
+        </p>
+
+    {% endif %}
+
+
+    <br>
+
+
+    <a href="{% url 'book-list' %}">
+        Back to Books
+    </a>
+
+</body>
+
+</html>

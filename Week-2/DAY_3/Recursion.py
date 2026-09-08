@@ -36,3 +36,56 @@ def print_pyras(n):
 
 print_pyras(n)
 
+
+
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+
+# Create tree
+root = Node(1)
+
+root.left = Node(2)
+root.right = Node(3)
+
+root.left.left = Node(4)
+root.left.right = Node(5)
+
+
+# Inorder: Left → Root → Right
+def inorder(root):
+    if root:
+        inorder(root.left)
+        print(root.value, end=" ")
+        inorder(root.right)
+
+
+# Preorder: Root → Left → Right
+def preorder(root):
+    if root:
+        print(root.value, end=" ")
+        preorder(root.left)
+        preorder(root.right)
+
+
+# Postorder: Left → Right → Root
+def postorder(root):
+    if root:
+        postorder(root.left)
+        postorder(root.right)
+        print(root.value, end=" ")
+
+
+# Print results
+print("Inorder:")
+inorder(root)
+
+print("\nPreorder:")
+preorder(root)
+
+print("\nPostorder:")
+postorder(root)
+

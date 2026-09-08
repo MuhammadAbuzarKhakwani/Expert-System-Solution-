@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Catalog</title>
+</head>
+
+<body>
+
+    <h1>Library Catalog</h1>
+
+    <form method="GET" action="{% url 'book-list' %}">
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Search by title or author"
+            value="{{ search }}"
+        >
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+    <br>
+
+    {% if page_obj.paginator.count %}
+
+        <ul>
+
+            {% for book in page_obj %}
+
+                <li>
+
+                    <a href="{% url 'book-detail' book.pk %}">
+                        {{ book.title }}
+                    </a>
+
+                    by {{ book.author }}
+
+                    {% if book.available %}
+                        — Available
+                    {% else %}
+                        — Borrowed
+                    {% endif %}
+
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    {% else %}
+
+        <p>No books found.</p>
+
+    {% endif %}
+
+
+    <br>
+
+
+    <a href="{% url 'book-create' %}">
+        <button type="button">
+            Add New Book
+        </button>
+    </a>
+
+
+    {% if user.is_authenticated %}
+
+        <a href="{% url 'my-books' %}">
+            <button type="button">
+                My Borrowed Books
+            </button>
+        </a>
+
+    {% endif %}
+
+
+    <hr>
+
+
+    <!-- Pagination -->
+
+    {% if page_obj.has_previous %}
+
+        <a href="?search={{ search|urlencode }}&page={{ page_obj.previous_page_number }}">
+            Previous
+        </a>
+
+    {% endif %}
+
+
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+
+
+    {% if page_obj.has_next %}
+
+        <a href="?search={{ search|urlencode }}&page={{ page_obj.next_page_number }}">
+            Next
+        </a>
+
+    {% endif %}
+
+
+</body>
+</html>

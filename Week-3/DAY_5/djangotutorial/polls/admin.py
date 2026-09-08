@@ -12,4 +12,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Choice)
+admin.site.register(Choice)\
+
+
+    

@@ -1,0 +1,10 @@
+{% if book %}
+    <h2>Borrow Book</h2>
+    <p>Are you sure you want to borrow "{{ book.title }}" by {{ book.author }}?</p>
+    <form action="{% url 'book-detail' book.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, Borrow</button>
+    </form>
+{% else %}
+    <p>Book not found.</p>
+{% endif %}

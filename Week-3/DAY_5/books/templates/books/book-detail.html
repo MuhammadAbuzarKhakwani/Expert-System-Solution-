@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ book.title }}</title>
+</head>
+
+<body>
+
+    <h1>{{ book.title }}</h1>
+
+    <p>
+        <strong>Author:</strong>
+        {{ book.author }}
+    </p>
+
+    <p>
+        <strong>Category:</strong>
+        {{ book.category }}
+    </p>
+
+    <p>
+        <strong>ISBN:</strong>
+        {{ book.isbn }}
+    </p>
+
+    <p>
+        <strong>Published:</strong>
+        {{ book.published_date }}
+    </p>
+
+    <p>
+        <strong>Available:</strong>
+
+        {% if book.available %}
+            Yes
+        {% else %}
+            Borrowed
+        {% endif %}
+
+    </p>
+
+
+    <hr>
+
+
+    <!-- Edit -->
+
+    <a href="{% url 'book-edit' book.pk %}">
+        <button type="button">
+            Edit Book
+        </button>
+    </a>
+
+
+    <!-- Back -->
+
+    <a href="{% url 'book-list' %}">
+        <button type="button">
+            Back to Books
+        </button>
+    </a>
+
+
+    <br>
+    <br>
+
+
+    <!-- Delete -->
+
+    <form
+        action="{% url 'delete_book' book.pk %}"
+        method="post"
+        style="display: inline;"
+    >
+
+        {% csrf_token %}
+
+        <button type="submit">
+            Delete Book
+        </button>
+
+    </form>
+
+
+    {% if user.is_authenticated %}
+
+        {% if book.available %}
+
+            <!-- Borrow -->
+
+            <form
+                action="{% url 'borrow_book' book.pk %}"
+                method="post"
+                style="display: inline;"
+            >
+
+                {% csrf_token %}
+
+                <button type="submit">
+                    Borrow Book
+                </button>
+
+            </form>
+
+        {% else %}
+
+            <!-- Return -->
+
+            <form
+                action="{% url 'return_book' book.pk %}"
+                method="post"
+                style="display: inline;"
+            >
+
+                {% csrf_token %}
+
+                <button type="submit">
+                    Return Book
+                </button>
+
+            </form>
+
+        {% endif %}
+
+    {% else %}
+
+        <p>
+            Please log in to borrow or return books.
+        </p>
+
+    {% endif %}
+
+
+    <!-- Messages -->
+
+    {% if messages %}
+
+        <ul>
+
+            {% for message in messages %}
+
+                <li>
+                    {{ message }}
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    {% endif %}
+
+
+</body>
+
+</html>

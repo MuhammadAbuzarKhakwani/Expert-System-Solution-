@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ book.title }}</title>
+</head>
+<body>
+
+    <h1>{{ book.title }}</h1>
+
+    <p>Author: {{ book.author }}</p>
+    <p>Category: {{ book.category }}</p>
+    <p>ISBN: {{ book.isbn }}</p>
+    <p>Published: {{ book.published_date }}</p>
+    <p>Available: {% if book.available == True %}Yes{% else %}Borrowed{% endif %}</p>
+
+    <form action="{% url 'book-edit' book.pk %}" method="get" style="display: inline;">
+        <button type="submit">Edit Book</button>
+    </form>
+
+    <form action="{% url 'book-list' %}" method="get" style="display: inline;">
+        <button type="submit">Back to Books</button>
+    </form>
+
+    <br>
+    <br>
+    
+  
+    <form action="{% url 'delete_book' book.pk %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit">Delete Book</button>
+    </form>
+
+    <form action="{% url 'borrow_book' book.pk %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit">Borrow Book</button>
+    </form>
+
+    <form action="{% url 'return_book' book.pk %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit">Return Book</button>
+    </form>
+
+
+</body>
+</html>
