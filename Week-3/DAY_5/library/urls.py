@@ -11,3 +11,4 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='book-list'), name='logout'),
     path('register/', views.register, name='register'),
 ]
+# url working
