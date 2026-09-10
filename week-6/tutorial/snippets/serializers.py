@@ -4,13 +4,14 @@ from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
 class SnippetSerializer(serializers.Serializer):
 
     id =  serializers.CharField(read_only = True)
-    title = serializers.CharField(required=False, allow_bank = True,max_length = 110)
-    code = serializers.CharField(style={"base_template": "textarea.html"})
+    title = serializers.CharField(required=False, allow_blank = True,max_length = 110)
+    code = serializers.CharField(style={"base_template": "textarea.html"}) #When Rendering Html than base_template is used to render the code in textarea   
     linenos = serializers.BooleanField(required=False)
     language = serializers.ChoiceField(choices=LANGUAGE_CHOICES, default="python")
-    tyle = serializers.ChoiceField(choices=STYLE_CHOICES, default="friendly")
+    style = serializers.ChoiceField(choices=STYLE_CHOICES, default="friendly")
     
     def create(self, validated_data):
+        
         """
         Create and return a new `Snippet` instance, given the validated data.
         """
