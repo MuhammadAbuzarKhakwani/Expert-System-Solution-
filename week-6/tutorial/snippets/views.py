@@ -336,7 +336,7 @@
 
 #     def delete(self,request,*args,**kwargs):
 #         return self.destroy(request,*args,**kwargs)
-
+######################################################################################################
 from django.contrib.auth.models import User
 
 from rest_framework import generics, permissions
@@ -344,6 +344,7 @@ from rest_framework import generics, permissions
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer, UserSerializer
 from snippets.permissions import IsOwnerOrReadOnly
+
 
 
 class SnippetList(generics.ListCreateAPIView):
