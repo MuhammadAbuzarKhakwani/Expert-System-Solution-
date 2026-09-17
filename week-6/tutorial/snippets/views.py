@@ -337,19 +337,20 @@
 #     def delete(self,request,*args,**kwargs):
 #         return self.destroy(request,*args,**kwargs)
 ######################################################################################################
+######################################################################################################
 from django.contrib.auth.models import User
-from rest_framework import viewsets
 
-from rest_framework import generics, permissions
+from rest_framework import permissions, renderers, viewsets
+from rest_framework.decorators import action, api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer, UserSerializer
 from snippets.permissions import IsOwnerOrReadOnly
-from rest_framework.decorators import api_view  
-from rest_framework import renderers
-from rest_framework.response import Response
-from rest_framework.reverse import reverse
-from rest_framework import viewsets
+
+# from rest_framework import generics   # no longer used — viewsets replace the generic views
+
 
 # class SnippetHighlight(generics.GenericAPIView):
 #     queryset = Snippet.objects.all()
@@ -364,10 +365,11 @@ from rest_framework import viewsets
 def api_root(request, format=None):
     return Response(
         {
-            "users": reverse("user-list", request=request, format=format),   # ← comma
+            "users": reverse("user-list", request=request, format=format),
             "snippets": reverse("snippet-list", request=request, format=format),
         }
     )
+
 
 # class SnippetList(generics.ListCreateAPIView):
 #     queryset = Snippet.objects.all()
@@ -385,10 +387,6 @@ def api_root(request, format=None):
 #         permissions.IsAuthenticatedOrReadOnly,
 #         IsOwnerOrReadOnly,
 #     ]
-from rest_framework import permissions
-from rest_framework import renderers
-from rest_framework.decorators import action
-from rest_framework.response import Response
 
 
 class SnippetViewSet(viewsets.ModelViewSet):
@@ -421,8 +419,6 @@ class SnippetViewSet(viewsets.ModelViewSet):
 #     queryset = User.objects.all()
 #     serializer_class = UserSerializer
 #     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
