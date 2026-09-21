@@ -1,5 +1,9 @@
 const API_BASE_URL = 'http://localhost:8000/api';
 
+// Global state for form operations
+let currentQuizId = null;
+let currentQuestionId = null;
+
 // Check if user is logged in on page load
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('authToken');
@@ -220,6 +224,7 @@ async function createQuiz() {
 // View quiz detail
 async function viewQuiz(quizId) {
     const token = localStorage.getItem('authToken');
+    currentQuizId = quizId;
 
     try {
         const response = await fetch(`${API_BASE_URL}/quizzes/${quizId}/`, {
@@ -245,21 +250,31 @@ async function viewQuiz(quizId) {
         const questionsContainer = document.getElementById('questions-container');
         if (quiz.questions && quiz.questions.length > 0) {
             questionsContainer.innerHTML = quiz.questions.map((question, index) => `
-                <div class="question-item">
+                <div class="question-item" data-question-id="${question.id}">
                     <h4>${index + 1}. ${question.text}</h4>
-                    <ul class="options-list">
-                        ${question.options.map(option => `
-                            <li class="${option.is_correct ? 'correct' : ''}">
-                                ${option.text}
-                                ${option.is_correct ? ' ✓' : ''}
-                            </li>
-                        `).join('')}
-                    </ul>
+                    ${question.options && question.options.length > 0 ? `
+                        <ul class="options-list">
+                            ${question.options.map(option => `
+                                <li class="${option.is_correct ? 'correct' : ''}">
+                                    <span>${option.text}</span>
+                                    ${option.is_correct ? '<span class="option-badge">Correct</span>' : ''}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    ` : '<p class="empty-state">No options yet</p>'}
+                    <div class="question-actions">
+                        <button onclick="showAddOptionForm(${question.id})" class="btn btn-primary">+ Add Option</button>
+                        <button onclick="deleteQuestion(${question.id})" class="btn btn-danger">Delete Question</button>
+                    </div>
                 </div>
             `).join('');
         } else {
-            questionsContainer.innerHTML = '<p class="loading">No questions in this quiz yet.</p>';
+            questionsContainer.innerHTML = '<p class="empty-state">No questions yet. Click "Add Question" to get started!</p>';
         }
+
+        // Hide any open forms
+        hideAddQuestionForm();
+        hideAddOptionForm();
     } catch (error) {
         showMessage('Error loading quiz: ' + error.message, 'error');
     }
@@ -311,4 +326,152 @@ function showMessage(message, type) {
     setTimeout(() => {
         messageDiv.remove();
     }, 4000);
+}
+
+// ============ QUESTION FUNCTIONS ============
+
+// Show add question form
+function showAddQuestionForm() {
+    document.getElementById('add-question-form').classList.remove('hidden');
+    document.getElementById('question-text').value = '';
+    document.getElementById('question-text').focus();
+}
+
+// Hide add question form
+function hideAddQuestionForm() {
+    document.getElementById('add-question-form').classList.add('hidden');
+    document.getElementById('question-text').value = '';
+}
+
+// Create question
+async function createQuestion() {
+    const token = localStorage.getItem('authToken');
+    const questionText = document.getElementById('question-text').value.trim();
+
+    if (!questionText) {
+        showMessage('Please enter a question', 'error');
+        return;
+    }
+
+    if (!currentQuizId) {
+        showMessage('No quiz selected', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/questions/`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                quiz: currentQuizId,
+                text: questionText
+            })
+        });
+
+        if (response.ok) {
+            showMessage('Question added successfully!', 'success');
+            hideAddQuestionForm();
+            // Reload quiz to show new question
+            viewQuiz(currentQuizId);
+        } else {
+            const error = await response.json();
+            showMessage('Failed to create question: ' + JSON.stringify(error), 'error');
+        }
+    } catch (error) {
+        showMessage('Error: ' + error.message, 'error');
+    }
+}
+
+// Delete question
+async function deleteQuestion(questionId) {
+    const token = localStorage.getItem('authToken');
+
+    if (!confirm('Are you sure you want to delete this question?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/questions/${questionId}/`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Token ${token}`
+            }
+        });
+
+        if (response.ok || response.status === 204) {
+            showMessage('Question deleted successfully!', 'success');
+            viewQuiz(currentQuizId);
+        } else {
+            showMessage('Failed to delete question', 'error');
+        }
+    } catch (error) {
+        showMessage('Error: ' + error.message, 'error');
+    }
+}
+
+// ============ OPTION FUNCTIONS ============
+
+// Show add option form
+function showAddOptionForm(questionId) {
+    currentQuestionId = questionId;
+    document.getElementById('add-option-form').classList.remove('hidden');
+    document.getElementById('add-option-title').textContent = `Add Option to Question #${questionId}`;
+    document.getElementById('option-text').value = '';
+    document.getElementById('option-is-correct').checked = false;
+    document.getElementById('option-text').focus();
+}
+
+// Hide add option form
+function hideAddOptionForm() {
+    document.getElementById('add-option-form').classList.add('hidden');
+    document.getElementById('option-text').value = '';
+    document.getElementById('option-is-correct').checked = false;
+    currentQuestionId = null;
+}
+
+// Create option
+async function createOption() {
+    const token = localStorage.getItem('authToken');
+    const optionText = document.getElementById('option-text').value.trim();
+    const isCorrect = document.getElementById('option-is-correct').checked;
+
+    if (!optionText) {
+        showMessage('Please enter option text', 'error');
+        return;
+    }
+
+    if (!currentQuestionId) {
+        showMessage('No question selected', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/quizzes/options/`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                question: currentQuestionId,
+                text: optionText,
+                is_correct: isCorrect
+            })
+        });
+
+        if (response.ok) {
+            showMessage('Option added successfully!', 'success');
+            hideAddOptionForm();
+            // Reload quiz to show new option
+            viewQuiz(currentQuizId);
+        } else {
+            const error = await response.json();
+            showMessage('Failed to create option: ' + JSON.stringify(error), 'error');
+        }
+    } catch (error) {
+        showMessage('Error: ' + error.message, 'error');
+    }
 }

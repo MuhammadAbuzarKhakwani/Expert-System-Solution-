@@ -285,8 +285,25 @@ textarea.input-field {
     margin-bottom: 30px;
 }
 
-#questions-container {
+.questions-section {
     margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+#questions-container {
+    margin-top: 15px;
 }
 
 .question-item {
@@ -299,24 +316,81 @@ textarea.input-field {
 
 .question-item h4 {
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     font-size: 16px;
+}
+
+.question-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.question-actions .btn {
+    width: auto;
+    margin: 0;
+    padding: 8px 15px;
+    font-size: 12px;
 }
 
 .options-list {
     list-style: none;
     margin-left: 20px;
+    margin-bottom: 15px;
 }
 
 .options-list li {
     padding: 8px 0;
     color: #666;
     font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .options-list li.correct {
     color: #27ae60;
     font-weight: 600;
+}
+
+.option-badge {
+    background: #e8f5e9;
+    color: #27ae60;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.form-section {
+    background: #f0f4ff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #667eea;
+}
+
+.form-section h3 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.button-group .btn {
+    flex: 1;
+    margin: 0;
+}
+
+.empty-state {
+    text-align: center;
+    color: #999;
+    padding: 30px;
+    background: #f9f9f9;
+    border-radius: 8px;
 }
 
 .loading {

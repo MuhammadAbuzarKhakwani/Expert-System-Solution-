@@ -60,4 +60,4 @@ class QuizSerializer(serializers.ModelSerializer):
 
 
 
-
+#added frontend as well

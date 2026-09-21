@@ -89,7 +89,46 @@
                         <h2 id="detail-title"></h2>
                         <p id="detail-description"></p>
                         <p id="detail-category"></p>
-                        <div id="questions-container"></div>
+                        
+                        <div class="questions-section">
+                            <div class="section-header">
+                                <h3>Questions</h3>
+                                <button onclick="showAddQuestionForm()" class="btn btn-primary" style="width: auto; margin: 0;">+ Add Question</button>
+                            </div>
+                            <div id="questions-container"></div>
+                        </div>
+
+                        <!-- Add Question Form -->
+                        <div id="add-question-form" class="form-section hidden">
+                            <h3>Add New Question</h3>
+                            <div class="form-group">
+                                <label>Question Text:</label>
+                                <textarea id="question-text" placeholder="Enter question" class="input-field"></textarea>
+                            </div>
+                            <div class="button-group">
+                                <button onclick="createQuestion()" class="btn btn-primary">Save Question</button>
+                                <button onclick="hideAddQuestionForm()" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- Add Option Form -->
+                        <div id="add-option-form" class="form-section hidden">
+                            <h3 id="add-option-title">Add Option to Question</h3>
+                            <div class="form-group">
+                                <label>Option Text:</label>
+                                <input type="text" id="option-text" placeholder="Enter option text" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="option-is-correct">
+                                    Mark as correct answer
+                                </label>
+                            </div>
+                            <div class="button-group">
+                                <button onclick="createOption()" class="btn btn-primary">Save Option</button>
+                                <button onclick="hideAddOptionForm()" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
