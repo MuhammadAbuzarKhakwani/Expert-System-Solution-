@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamari Quiz App</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Auth Container -->
+        <div id="auth-container" class="container">
+            <div class="auth-box">
+                <h1>Hamari Quiz App</h1>
+                
+                <!-- Login Form -->
+                <div id="login-form" class="auth-form">
+                    <h2>Login</h2>
+                    <input type="text" id="login-username" placeholder="Username" class="input-field">
+                    <input type="password" id="login-password" placeholder="Password" class="input-field">
+                    <button onclick="loginUser()" class="btn btn-primary">Login</button>
+                    <p class="toggle-link">Don't have an account? <a href="#" onclick="toggleForms(); return false;">Register here</a></p>
+                </div>
+
+                <!-- Register Form -->
+                <div id="register-form" class="auth-form hidden">
+                    <h2>Register</h2>
+                    <input type="text" id="register-username" placeholder="Username" class="input-field">
+                    <input type="email" id="register-email" placeholder="Email" class="input-field">
+                    <input type="text" id="register-first-name" placeholder="First Name (optional)" class="input-field">
+                    <input type="text" id="register-last-name" placeholder="Last Name (optional)" class="input-field">
+                    <input type="password" id="register-password" placeholder="Password" class="input-field">
+                    <input type="password" id="register-password2" placeholder="Confirm Password" class="input-field">
+                    <button onclick="registerUser()" class="btn btn-primary">Register</button>
+                    <p class="toggle-link">Already have an account? <a href="#" onclick="toggleForms(); return false;">Login here</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Container -->
+        <div id="dashboard-container" class="container hidden">
+            <nav class="navbar">
+                <div class="navbar-brand">Hamari Quiz App</div>
+                <div class="navbar-menu">
+                    <span id="user-info"></span>
+                    <button onclick="logoutUser()" class="btn btn-secondary">Logout</button>
+                </div>
+            </nav>
+
+            <div class="dashboard">
+                <div class="sidebar">
+                    <button onclick="showQuizzes()" class="btn btn-block">My Quizzes</button>
+                    <button onclick="showCreateQuiz()" class="btn btn-block btn-primary">Create Quiz</button>
+                </div>
+
+                <div class="main-content">
+                    <!-- Quiz List View -->
+                    <div id="quiz-list-view" class="view">
+                        <h2>My Quizzes</h2>
+                        <div id="quizzes-container" class="quizzes-grid">
+                            <p class="loading">Loading quizzes...</p>
+                        </div>
+                    </div>
+
+                    <!-- Create Quiz View -->
+                    <div id="create-quiz-view" class="view hidden">
+                        <h2>Create New Quiz</h2>
+                        <div class="form-group">
+                            <label>Title:</label>
+                            <input type="text" id="quiz-title" placeholder="Quiz Title" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea id="quiz-description" placeholder="Quiz Description" class="input-field"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Category:</label>
+                            <input type="text" id="quiz-category" placeholder="Category" class="input-field">
+                        </div>
+                        <button onclick="createQuiz()" class="btn btn-primary">Create Quiz</button>
+                    </div>
+
+                    <!-- Quiz Detail View -->
+                    <div id="quiz-detail-view" class="view hidden">
+                        <div class="quiz-header">
+                            <button onclick="showQuizzes()" class="btn btn-secondary">← Back</button>
+                            <button id="delete-quiz-btn" onclick="deleteQuiz()" class="btn btn-danger">Delete</button>
+                        </div>
+                        <h2 id="detail-title"></h2>
+                        <p id="detail-description"></p>
+                        <p id="detail-category"></p>
+                        <div id="questions-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
