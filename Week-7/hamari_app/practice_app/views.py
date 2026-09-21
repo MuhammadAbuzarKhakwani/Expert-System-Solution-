@@ -20,6 +20,6 @@ class QuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
-#models updated 
+
 
     
