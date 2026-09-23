@@ -2,33 +2,33 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-# class Category(models.Model):
-#     name = models.CharField(max_length=70)
-#     description = models.TextField(max_length=200)
-#     is_active = models.BooleanField(default=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     class Meta:
-#         verbose_name_plural = "Categories"
-#         ordering = ['-created_at']
-
-#     def __str__(self):
-#         return self.name
-
-
-class Brand(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=70)
-    description = models.TextField(max_length=350)
+    description = models.TextField(max_length=200)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        verbose_name_plural = "Categories"
         ordering = ['-created_at']
 
     def __str__(self):
         return self.name
+
+
+# class Brand(models.Model):
+#     name = models.CharField(max_length=70)
+#     description = models.TextField(max_length=350)
+#     is_active = models.BooleanField(default=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     class Meta:
+#         ordering = ['-created_at']
+
+#     def __str__(self):
+#         return self.name
 
 
 class Product(models.Model):
