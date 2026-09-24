@@ -24,3 +24,18 @@ class SupplierSerializer(serializer.ModelSerializer):
     class Meta:
         model = Supplier
         Field = ['name','company_name','email','phone','address','tax_number','is_active','created_at','updated_at']
+
+
+class CustomerSerializer(serializer.ModelSerializer):
+
+    class Meta:
+        model = Customer
+        Field = ['name','email','phone','address','tax_number','is_active','created_at','updated_at']
+
+
+class WarehouseSerializer(serializer.ModelSerializer):
+
+    class Meta:
+        model = Warehouse
+        Field = ['name','code','address','manager','is_active','created_at','updated_at']
+
