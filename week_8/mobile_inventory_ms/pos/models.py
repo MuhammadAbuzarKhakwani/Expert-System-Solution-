@@ -9,26 +9,19 @@ class Category(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        verbose_name_plural = "Categories"
-        ordering = ['-created_at']
-
     def __str__(self):
         return self.name
 
 
-# class Brand(models.Model):
-#     name = models.CharField(max_length=70)
-#     description = models.TextField(max_length=350)
-#     is_active = models.BooleanField(default=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+class Brand(models.Model):
+    name = models.CharField(max_length=70)
+    description = models.TextField(max_length=350)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-#     class Meta:
-#         ordering = ['-created_at']
-
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
@@ -53,13 +46,6 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        ordering = ['-created_at']
-        indexes = [
-            models.Index(fields=['sku']),
-            models.Index(fields=['category']),
-            models.Index(fields=['brand']),
-        ]
 
     def __str__(self):
         return self.name
@@ -76,8 +62,7 @@ class Supplier(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        ordering = ['-created_at']
+
 
     def __str__(self):
         return self.company_name
@@ -93,8 +78,6 @@ class Customer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        ordering = ['-created_at']
 
     def __str__(self):
         return self.name
@@ -109,8 +92,6 @@ class Warehouse(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        ordering = ['-created_at']
 
     def __str__(self):
         return self.name
@@ -123,11 +104,6 @@ class Stock(models.Model):
     quantity = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        unique_together = ('product', 'warehouse')
-        indexes = [
-            models.Index(fields=['product', 'warehouse']),
-        ]
 
     def __str__(self):
         return f"{self.product.name} - {self.warehouse.name}: {self.quantity}"
