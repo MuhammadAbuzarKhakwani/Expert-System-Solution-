@@ -104,6 +104,14 @@ class Stock(models.Model):
     quantity = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["product", "warehouse"],
+                name="unique_product_warehouse"
+            )
+        ]
+
 
     def __str__(self):
         return f"{self.product.name} - {self.warehouse.name}: {self.quantity}"
