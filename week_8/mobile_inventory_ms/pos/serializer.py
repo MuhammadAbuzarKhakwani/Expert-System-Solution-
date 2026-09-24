@@ -1,41 +1,54 @@
-from rest_framework import serializer 
-from . import models 
+from rest_framework import serializers  
+from .models import (
+    Category,
+    Brand,
+    Product,
+    Supplier,
+    Customer,
+    Warehouse,
+    Stock,
+)
 
-class CategorySerializer(serializer.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Category
-        Field = ['id','name','description','is_active','created_at','updated_at']
+        fields = ['id','name','description','is_active','created_at','updated_at']
 
-class BrandSerializer(serializer.ModelSerializer):
+class BrandSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Brand
-        Field = ['id','name','description','is_active','created_at','updated_at']
+        fields = ['id','name','description','is_active','created_at','updated_at']
 
-class ProductSerializer(serializer.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        Field = ['sku','name','description','category','brand','barcode','cost_price','selling_price','minimum_stock','unit','is_active','created_at','updated_at'] 
+        fields = ['id','sku','name','description','category','brand','barcode','cost_price','selling_price','minimum_stock','unit','is_active','created_at','updated_at'] 
 
-class SupplierSerializer(serializer.ModelSerializer):
+class SupplierSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Supplier
-        Field = ['name','company_name','email','phone','address','tax_number','is_active','created_at','updated_at']
+        fields = ['id','name','company_name','email','phone','address','tax_number','is_active','created_at','updated_at']
 
 
-class CustomerSerializer(serializer.ModelSerializer):
+class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        Field = ['name','email','phone','address','tax_number','is_active','created_at','updated_at']
+        fields = ['id','name','email','phone','address','tax_number','is_active','created_at','updated_at']
 
 
-class WarehouseSerializer(serializer.ModelSerializer):
+class WarehouseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Warehouse
-        Field = ['name','code','address','manager','is_active','created_at','updated_at']
+        fields = ['id','name','code','address','manager','is_active','created_at','updated_at']
 
+class StockSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Stock
+        fields = ['id','product','warehouse','quantity','update_at']
