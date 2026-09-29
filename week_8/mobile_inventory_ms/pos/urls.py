@@ -19,6 +19,8 @@ router.register("products",ProductViewSet)
 router.register("suppliers",SupplierViewSet)
 router.register("customers", CustomerViewSet)
 router.register("warehouses",WarehouseViewSet)
+
+
 router.register("stocks",StockViewSet)
 
 urlpatterns = [

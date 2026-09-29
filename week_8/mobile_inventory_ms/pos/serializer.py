@@ -8,9 +8,14 @@ from .models import (
     Warehouse,
     Stock,
 )
-
 class CategorySerializer(serializers.ModelSerializer):
     
+    def validate_name(self,value): 
+        if len(value) < 3:
+            raise serializers.ValidationError(
+                "Product name must contain at least 3 characters."
+            )
+        return value
     class Meta:
         model = Category
         fields = ['id','name','description','is_active','created_at','updated_at']
@@ -51,4 +56,4 @@ class StockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stock
-        fields = ['id','product','warehouse','quantity','update_at']
+        fields = ['id','product','warehouse','quantity','updated_at']
