@@ -1,0 +1,228 @@
+{% extends 'pos/base.html' %}
+
+{% block title %}Sales | Mobile POS{% endblock %}
+{% block page_heading %}Sales{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Sales desk</h1>
+        <p>Process transactions, track invoices, and review payment status.</p>
+    </div>
+    <button class="primary-btn" type="button">New sale</button>
+</div>
+
+<div class="pos-layout">
+    <div class="panel">
+        <div class="panel-title">
+            <h3>Available products</h3>
+            <span class="pill">Quick sale</span>
+        </div>
+        <div class="product-list">
+            {% for variant in quick_products %}
+            <div class="product-item" data-id="{{ variant.id }}" data-name="{{ variant.product.name }}" data-price="{{ variant.selling_price }}" data-tax="{{ variant.tax_rate }}" data-stock="{{ variant.stocks.first.quantity|default:0 }}">
+                <h4>{{ variant.product.name }}</h4>
+                <div class="product-meta">{{ variant.product.category.name }} / {{ variant.ram_gb|default:'N/A' }}GB RAM</div>
+                <div class="product-price">PKR {{ variant.selling_price|floatformat:0 }}</div>
+                <button class="secondary-btn add-to-cart" type="button">Add to cart</button>
+            </div>
+            {% empty %}
+            <div class="empty-state">No products available for quick sale.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <aside class="cart-box">
+        <div class="panel-title">
+            <h3>Cart</h3>
+            <span class="badge neutral" id="cart-count">0 items</span>
+        </div>
+
+        <div class="field" style="margin-bottom:14px;">
+            <label for="customer-select">Customer</label>
+            <select id="customer-select">
+                <option value="">Walk-in customer</option>
+                {% for customer in customers %}
+                    <option value="{{ customer.id }}">{{ customer.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="field" style="margin-bottom:14px;">
+            <label for="payment-method">Payment method</label>
+            <select id="payment-method">
+                <option value="CASH">Cash</option>
+                <option value="CARD">Card</option>
+                <option value="BANK">Bank Transfer</option>
+                <option value="JAZZCASH">JazzCash</option>
+                <option value="EASYPAISA">Easypaisa</option>
+                <option value="CREDIT">Credit (Udhaar)</option>
+            </select>
+        </div>
+
+        <div id="cart-items">
+            <div class="empty-state">Your cart is empty.</div>
+        </div>
+
+        <div class="total-box">
+            <div class="total-row"><span>Subtotal</span><span id="subtotal-value">PKR 0</span></div>
+            <div class="total-row"><span>Tax</span><span id="tax-value">PKR 0</span></div>
+            <div class="total-row"><strong>Total</strong><strong id="total-value">PKR 0</strong></div>
+            <button class="primary-btn save-sale" type="button" style="width: 100%; margin-top: 12px;">Complete sale</button>
+        </div>
+    </aside>
+</div>
+
+<script>
+const cart = [];
+
+function formatCurrency(value) {
+    return 'PKR ' + Number(value).toLocaleString();
+}
+
+function getCartCount() {
+    return cart.reduce((sum, item) => sum + item.qty, 0);
+}
+
+function renderCart() {
+    const cartItems = document.getElementById('cart-items');
+    const cartCount = document.getElementById('cart-count');
+    const subtotalValue = document.getElementById('subtotal-value');
+    const taxValue = document.getElementById('tax-value');
+    const totalValue = document.getElementById('total-value');
+
+    if (!cart.length) {
+        cartItems.innerHTML = '<div class="empty-state">Your cart is empty.</div>';
+        cartCount.textContent = '0 items';
+        subtotalValue.textContent = 'PKR 0';
+        taxValue.textContent = 'PKR 0';
+        totalValue.textContent = 'PKR 0';
+        return;
+    }
+
+    let subtotal = 0;
+    let taxTotal = 0;
+
+    cartItems.innerHTML = cart.map(item => {
+        const lineTotal = item.price * item.qty;
+        const tax = lineTotal * (item.taxRate || 0) / 100;
+        subtotal += lineTotal;
+        taxTotal += tax;
+
+        return `
+            <div class="cart-item">
+                <div>
+                    <strong>${item.name}</strong><br>
+                    <small>${item.qty} x ${formatCurrency(item.price)}</small>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <button class="ghost-btn" data-action="decrease" data-id="${item.id}" type="button">-</button>
+                    <span>${item.qty}</span>
+                    <button class="ghost-btn" data-action="increase" data-id="${item.id}" type="button">+</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    cartCount.textContent = getCartCount() + ' items';
+    subtotalValue.textContent = formatCurrency(subtotal);
+    taxValue.textContent = formatCurrency(taxTotal);
+    totalValue.textContent = formatCurrency(subtotal + taxTotal);
+}
+
+function addToCart(id, name, price, taxRate = 0) {
+    const existing = cart.find(item => item.id === id);
+    if (existing) {
+        existing.qty += 1;
+    } else {
+        cart.push({ id, name, price: Number(price), qty: 1, taxRate: Number(taxRate) });
+    }
+    renderCart();
+}
+
+function updateQty(id, delta) {
+    const item = cart.find(item => item.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) {
+        const index = cart.findIndex(item => item.id === id);
+        cart.splice(index, 1);
+    }
+    renderCart();
+}
+
+document.addEventListener('click', function (event) {
+    const target = event.target.closest('.add-to-cart');
+    if (target) {
+        const card = target.closest('.product-item');
+        const productId = Number(card.dataset.id);
+        const productName = card.dataset.name;
+        const productPrice = Number(card.dataset.price);
+        const taxRate = Number(card.dataset.tax || 0);
+        addToCart(productId, productName, productPrice, taxRate);
+        return;
+    }
+
+    const actionBtn = event.target.closest('[data-action]');
+    if (actionBtn) {
+        const id = Number(actionBtn.dataset.id);
+        const action = actionBtn.dataset.action;
+        if (action === 'increase') updateQty(id, 1);
+        if (action === 'decrease') updateQty(id, -1);
+    }
+
+    const saveBtn = event.target.closest('.save-sale');
+    if (saveBtn) {
+        if (!cart.length) {
+            alert('Add at least one product to the cart.');
+            return;
+        }
+
+        const customerId = document.getElementById('customer-select').value;
+        const paymentMethod = document.getElementById('payment-method').value;
+        const warehouseId = Number('{{ warehouse_id|default:0 }}');
+        const totalAmount = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+        const payload = {
+            warehouse: warehouseId,
+            customer: customerId || null,
+            items: cart.map(item => ({
+                variant: item.id,
+                quantity: item.qty,
+                discount: 0,
+                imei: ''
+            })),
+            payments: [{
+                method: paymentMethod,
+                amount: totalAmount,
+                reference: 'Front-end sale'
+            }]
+        };
+
+        fetch('/save-sale/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(async response => {
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.detail || JSON.stringify(data));
+            }
+            alert('Sale saved successfully.');
+            cart.length = 0;
+            renderCart();
+            document.getElementById('customer-select').value = '';
+            document.getElementById('payment-method').value = 'CASH';
+        })
+        .catch(error => {
+            alert('Error saving sale: ' + error.message);
+        });
+    }
+});
+
+renderCart();
+</script>
+{% endblock %}

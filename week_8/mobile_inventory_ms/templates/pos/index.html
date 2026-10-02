@@ -1,0 +1,101 @@
+{% extends 'pos/base.html' %}
+
+{% block title %}Dashboard | Mobile POS{% endblock %}
+{% block page_heading %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Overview</h1>
+        <p>Track sales, stock, and customer activity in real-time.</p>
+    </div>
+    <button class="primary-btn" type="button">Create invoice</button>
+</div>
+
+<section class="stats-grid">
+    <div class="stat-card">
+        <div class="label">Revenue</div>
+        <p class="value">PKR {{ today_revenue|floatformat:0 }}</p>
+        <div class="trend">Latest generated sales</div>
+    </div>
+    <div class="stat-card">
+        <div class="label">Products</div>
+        <p class="value">{{ total_products }}</p>
+        <div class="trend">Active catalog items</div>
+    </div>
+    <div class="stat-card">
+        <div class="label">Low stock items</div>
+        <p class="value">{{ low_stock_count }}</p>
+        <div class="trend">Needing restock</div>
+    </div>
+    <div class="stat-card">
+        <div class="label">Due from customers</div>
+        <p class="value">PKR {{ customer_due|floatformat:0 }}</p>
+        <div class="trend">Outstanding balances</div>
+    </div>
+</section>
+
+<section class="card-grid">
+    <div class="panel">
+        <div class="panel-title">
+            <h3>Recent sales</h3>
+            <button class="ghost-btn" type="button">View all</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Invoice</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in recent_sales %}
+                <tr>
+                    <td>{{ sale.invoice_no }}</td>
+                    <td>{{ sale.customer.name|default:'Walk-in' }}</td>
+                    <td>PKR {{ sale.grand_total|floatformat:0 }}</td>
+                    <td>
+                        {% if sale.status == 'COMPLETED' %}
+                            <span class="badge success">Paid</span>
+                        {% elif sale.status == 'PARTIALLY_RETURNED' %}
+                            <span class="badge neutral">Partial</span>
+                        {% elif sale.status == 'DRAFT' %}
+                            <span class="badge warning">Draft</span>
+                        {% else %}
+                            <span class="badge danger">{{ sale.status }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="empty-state">No sales found yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">
+            <h3>Low stock</h3>
+            <span class="badge warning">Watchlist</span>
+        </div>
+        <div class="stats-grid" style="grid-template-columns: 1fr; margin-bottom: 0;">
+            {% for stock in low_stock_items %}
+            <div class="stat-card" style="padding: 14px 16px;">
+                <div class="label">{{ stock.variant.product.name }}</div>
+                <p class="value" style="font-size: 1.45rem;">{{ stock.quantity }}</p>
+                <div class="trend">Minimum: {{ stock.variant.minimum_stock }}</div>
+            </div>
+            {% empty %}
+            <div class="stat-card" style="padding: 14px 16px;">
+                <div class="label">No low stock items</div>
+                <p class="value" style="font-size: 1.2rem;">All good</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

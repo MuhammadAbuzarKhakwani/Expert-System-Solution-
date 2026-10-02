@@ -1,0 +1,57 @@
+{% extends 'pos/base.html' %}
+
+{% block title %}Products | Mobile POS{% endblock %}
+{% block page_heading %}Products{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Product catalog</h1>
+        <p>Manage inventory, stock levels, pricing, and categories.</p>
+    </div>
+    <button class="primary-btn" type="button">Add product</button>
+</div>
+
+<div class="panel">
+    <div class="panel-title">
+        <h3>Catalog</h3>
+        <input type="search" id="product-search" placeholder="Search product or SKU" style="width: 260px;">
+    </div>
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for variant in variants %}
+                <tr>
+                    <td>{{ variant.product.name }}{% if variant.color %} - {{ variant.color }}{% endif %}</td>
+                    <td>{{ variant.product.category.name }}</td>
+                    <td>{{ variant.product.brand.name }}</td>
+                    <td>PKR {{ variant.selling_price|floatformat:0 }}</td>
+                    <td>{{ variant.stock_quantity }}</td>
+                    <td>
+                        {% if variant.stock_quantity <= variant.minimum_stock %}
+                            <span class="badge warning">Low</span>
+                        {% else %}
+                            <span class="badge success">Available</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-state">No products found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

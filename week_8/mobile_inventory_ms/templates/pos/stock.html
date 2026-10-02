@@ -1,0 +1,57 @@
+{% extends 'pos/base.html' %}
+
+{% block title %}Stock | Mobile POS{% endblock %}
+{% block page_heading %}Stock{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Warehouse stock</h1>
+        <p>Monitor inventory movement and low-stock warnings across branches.</p>
+    </div>
+    <button class="primary-btn" type="button">Adjust stock</button>
+</div>
+
+<div class="panel">
+    <div class="panel-title">
+        <h3>Available inventory</h3>
+        <span class="badge warning">{{ stock_items|length }} entries</span>
+    </div>
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Warehouse</th>
+                    <th>Available</th>
+                    <th>Reserved</th>
+                    <th>Reorder</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stock in stock_items %}
+                <tr>
+                    <td>{{ stock.variant.product.name }}</td>
+                    <td>{{ stock.warehouse.name }}</td>
+                    <td>{{ stock.available }}</td>
+                    <td>{{ stock.reserved_quantity }}</td>
+                    <td>{{ stock.variant.minimum_stock }}</td>
+                    <td>
+                        {% if stock.available <= stock.variant.minimum_stock %}
+                            <span class="badge warning">Low</span>
+                        {% else %}
+                            <span class="badge success">Healthy</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-state">No stock records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

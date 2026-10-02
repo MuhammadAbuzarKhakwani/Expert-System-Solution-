@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mobile POS{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/pos.css' %}">
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-badge">P</div>
+                <div>
+                    <div>Mobile POS</div>
+                    <small>Inventory System</small>
+                </div>
+            </div>
+
+            <nav>
+                <ul class="nav-list">
+                    <li><a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">Dashboard</a></li>
+                    {% if can_view_products %}<li><a href="{% url 'products_page' %}" class="{% if 'products' in request.path %}active{% endif %}">Products</a></li>{% endif %}
+                    {% if can_view_sales %}<li><a href="{% url 'sales_page' %}" class="{% if 'sales' in request.path %}active{% endif %}">Sales</a></li>{% endif %}
+                    {% if can_view_stock %}<li><a href="{% url 'stock_page' %}" class="{% if 'stock' in request.path %}active{% endif %}">Stock</a></li>{% endif %}
+                    {% if can_view_customers %}<li><a href="{% url 'customers_page' %}" class="{% if 'customers' in request.path %}active{% endif %}">Customers</a></li>{% endif %}
+                    {% if can_view_suppliers %}<li><a href="{% url 'suppliers_page' %}" class="{% if 'suppliers' in request.path %}active{% endif %}">Suppliers</a></li>{% endif %}
+                </ul>
+            </nav>
+
+            <div class="user-box">
+                <strong>{{ user.get_full_name|default:user.username }}</strong>
+                <span>{{ user.email|default:'Administrator' }}</span>
+            </div>
+        </aside>
+
+        <main class="main-panel">
+            <header class="topbar">
+                <h2>{% block page_heading %}Dashboard{% endblock %}</h2>
+                <div class="top-actions">
+                    <span class="pill">Live</span>
+                    <a href="{% url 'logout' %}" class="ghost-btn">Logout</a>
+                </div>
+            </header>
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    {% else %}
+        {% block auth_content %}{% endblock %}
+    {% endif %}
+</body>
+</html>

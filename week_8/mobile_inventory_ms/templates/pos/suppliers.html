@@ -1,0 +1,53 @@
+{% extends 'pos/base.html' %}
+
+{% block title %}Suppliers | Mobile POS{% endblock %}
+{% block page_heading %}Suppliers{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Suppliers</h1>
+        <p>Review vendor information, outstanding payments, and purchase orders.</p>
+    </div>
+    <button class="primary-btn" type="button">Add supplier</button>
+</div>
+
+<div class="panel">
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Contact</th>
+                    <th>Phone</th>
+                    <th>Balance</th>
+                    <th>Last order</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for supplier in suppliers %}
+                <tr>
+                    <td>{{ supplier.company_name }}</td>
+                    <td>{{ supplier.name }}</td>
+                    <td>{{ supplier.phone }}</td>
+                    <td>PKR {{ supplier.balance|floatformat:0 }}</td>
+                    <td>{{ supplier.purchase_orders.first.created_at|date:'M d, Y'|default:'—' }}</td>
+                    <td>
+                        {% if supplier.balance > 0 %}
+                            <span class="badge warning">Due</span>
+                        {% else %}
+                            <span class="badge success">Settled</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-state">No suppliers found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
