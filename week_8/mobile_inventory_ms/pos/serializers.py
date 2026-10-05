@@ -568,10 +568,10 @@ class StockTransferSerializer(serializers.ModelSerializer):
             StockTransferItem.objects.create(transfer=transfer, **item)
         return transfer
 
-
 class CustomerLedgerSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerLedger
+        
         fields = "__all__"
 
 
