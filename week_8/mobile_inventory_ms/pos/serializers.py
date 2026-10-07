@@ -571,7 +571,6 @@ class StockTransferSerializer(serializers.ModelSerializer):
 class CustomerLedgerSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerLedger
-        
         fields = "__all__"
 
 
